@@ -2,7 +2,7 @@
 /**
  * Kiro MCP Server - Spec-driven development workflow for Gemini CLI
  * Author: @kelexine (https://github.com/kelexine)
- * Version: 1.0.0
+ * Version: 0.1.10
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -499,7 +499,7 @@ async function setTask(
 const server = new Server(
   {
     name: "kiro-mcp",
-    version: "1.0.0",
+    version: "0.1.10",
   },
   {
     capabilities: {
