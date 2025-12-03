@@ -313,6 +313,48 @@ async function kiroVibe(): Promise<string> {
   return `${directive}${helpers}\n\n**Mode**: Vibe Coding (Quick Development)`;
 }
 
+async function kiroStatus(): Promise<string> {
+  if (!fs.existsSync(SPECS_BASE)) {
+    return "No Kiro specs found. Start a feature with 'kiro_spec'.";
+  }
+
+  const features = fs.readdirSync(SPECS_BASE).filter(f => 
+    fs.statSync(path.join(SPECS_BASE, f)).isDirectory()
+  );
+
+  if (features.length === 0) {
+    return "No active features found.";
+  }
+
+  let output = "# Kiro Feature Status\n\n";
+  output += "| Feature | Phase | Current Task | Progress | Last Updated |\n";
+  output += "| :--- | :--- | :--- | :--- | :--- |\n";
+
+  for (const feature of features) {
+    const state = loadState(feature);
+    if (!state) continue;
+
+    let progress = "-";
+    if (state.phase === "execute" || state.phase === "task") {
+      const tasksPath = getSpecPath(feature, "tasks.md");
+      if (fileExists(tasksPath)) {
+        const tasksContent = readFile(tasksPath);
+        const tasks = parseTasksFile(tasksContent);
+        const total = tasks.length;
+        const completed = tasks.filter(t => t.status === "done").length;
+        progress = total > 0 ? `${completed}/${total} (${Math.round(completed/total*100)}%)` : "0/0";
+      }
+    }
+
+    const lastUpdate = new Date(state.last_updated).toLocaleString();
+    const currentTask = state.current_task || "-";
+    
+    output += `| ${state.feature} | ${state.phase} | ${currentTask} | ${progress} | ${lastUpdate} |\n`;
+  }
+
+  return output;
+}
+
 async function getTask(feature: string, taskId: string): Promise<string> {
   const tasksPath = getSpecPath(feature, "tasks.md");
   
@@ -435,6 +477,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: "kiro_status",
+      description: "Show status dashboard of all active features",
+      inputSchema: {
+        type: "object",
+        properties: {},
+      },
+    },
+    {
       name: "kiro_vibe",
       description: "Quick development mode (isolated, never combine with workflow tools)",
       inputSchema: {
@@ -493,6 +543,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return {
           content: [{ type: "text", text: await kiroExecute(args.feature as string, args.task_id as string | undefined) }],
         };
+      case "kiro_status":
+        return { content: [{ type: "text", text: await kiroStatus() }] };
       case "kiro_vibe":
         return { content: [{ type: "text", text: await kiroVibe() }] };
       case "get_task":
