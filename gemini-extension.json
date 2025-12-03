@@ -1,0 +1,12 @@
+{
+  "name": "kiro",
+  "version": "0.1.6",
+  "description": "Spec-driven development workflow - Requirements, Design, Tasks, Execute",
+  "mcpServers": {
+    "kiro": {
+      "command": "node",
+      "args": ["${extensionPath}/dist/kiro-server.js"]
+    }
+  },
+  "contextFileName": "GEMINI.md"
+}
