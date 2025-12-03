@@ -355,6 +355,47 @@ async function kiroStatus(): Promise<string> {
   return output;
 }
 
+async function kiroScaffold(feature: string): Promise<string> {
+  const designPath = getSpecPath(feature, "design.md");
+  if (!fileExists(designPath)) {
+    throw new Error("Design phase incomplete. Run kiro_design first.");
+  }
+
+  const content = readFile(designPath);
+  const structureMatch = content.match(/```file-structure([\s\S]*?)```/);
+  
+  if (!structureMatch) {
+    return "No 'file-structure' code block found in design.md. Cannot scaffold.";
+  }
+
+  const lines = structureMatch[1].split("\n").filter(line => line.trim());
+  const created: string[] = [];
+
+  for (const line of lines) {
+    // Simple parsing: remove tree chars and trim
+    const cleanPath = line.replace(/^[ │├└─-]+/, "").trim();
+    if (!cleanPath || cleanPath.startsWith("#")) continue;
+
+    // Check if it looks like a directory (ends with /) or has extension
+    const isDir = cleanPath.endsWith("/");
+    const fullPath = path.join(process.cwd(), cleanPath);
+
+    if (isDir) {
+      fs.mkdirSync(fullPath, { recursive: true });
+      created.push(`DIR: ${cleanPath}`);
+    } else {
+      // Ensure parent dir exists
+      fs.mkdirSync(path.dirname(fullPath), { recursive: true });
+      if (!fileExists(fullPath)) {
+        fs.writeFileSync(fullPath, "// Scaffolding placeholder\n");
+        created.push(`FILE: ${cleanPath}`);
+      }
+    }
+  }
+
+  return `Scaffolded ${created.length} items:\n${created.join("\n")}`;
+}
+
 async function getTask(feature: string, taskId: string): Promise<string> {
   const tasksPath = getSpecPath(feature, "tasks.md");
   
@@ -485,6 +526,17 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: "kiro_scaffold",
+      description: "Automatically create files and directories from design.md",
+      inputSchema: {
+        type: "object",
+        properties: {
+          feature: { type: "string", description: "Feature name" },
+        },
+        required: ["feature"],
+      },
+    },
+    {
       name: "kiro_vibe",
       description: "Quick development mode (isolated, never combine with workflow tools)",
       inputSchema: {
@@ -545,6 +597,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       case "kiro_status":
         return { content: [{ type: "text", text: await kiroStatus() }] };
+      case "kiro_scaffold":
+        return { content: [{ type: "text", text: await kiroScaffold(args.feature as string) }] };
       case "kiro_vibe":
         return { content: [{ type: "text", text: await kiroVibe() }] };
       case "get_task":

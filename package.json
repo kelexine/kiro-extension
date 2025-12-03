@@ -1,6 +1,6 @@
 {
   "name": "kiro-extension",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Kiro MCP Server - Spec-driven development workflow for Gemini CLI",
   "author": "@kelexine (https://github.com/kelexine)",
   "license": "MIT",

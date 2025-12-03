@@ -67,6 +67,7 @@ The design document should be based on the requirements document, so ensure it e
   - Data Models
   - Error Handling
   - Testing Strategy
+  - Proposed File Structure (MUST be a code block with language 'file-structure')
 - The model SHOULD include diagrams or visual representations when appropriate (use Mermaid for diagrams if applicable)
 - The model MUST ensure the design addresses all feature requirements identified during the clarification process
 - The model SHOULD highlight design decisions and their rationales
