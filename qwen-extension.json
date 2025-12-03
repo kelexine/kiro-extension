@@ -5,7 +5,7 @@
   "mcpServers": {
     "kiro": {
       "command": "node",
-      "args": ["${extensionPath}${/}dist${/}kiro-server.js"]
+      "args": ["${extensionPath}/dist/kiro-server.js"]
     }
   },
   "contextFileName": "CONTEXT.md"
