@@ -6,7 +6,7 @@ Spec-driven development workflow for Gemini CLI. Structured feature development 
 
 ### Phase Sequence (STRICT)
 ```
-kiro_spec → kiro_design → kiro_task → kiro_execute
+kiro_spec → kiro_design → kiro_task → kiro_execute → kiro_review
 ```
 
 **Each phase MUST:**
@@ -106,6 +106,28 @@ Task Management CANNOT start until phase validation is complete.
 - Requires: `tasks.md` exists
 - Auto-marks task as `[-]` if task_id provided
 - Injects: requirements.md + design.md + tasks.md
+
+**kiro_review(feature: string)**
+- QA Phase: Gap analysis and quality review
+- Requires: `tasks.md` exists (Execution complete)
+- Injects: All context
+- Goal: Verify implementation against requirements before shipping
+
+### Support Tools
+
+**kiro_status()**
+- Dashboard: Lists all active features and their progress
+- Shows: Phase, Active Task, Completion %
+- No prerequisites
+
+**kiro_scaffold(feature: string)**
+- Automation: Creates file structure from design.md
+- Requires: `design.md` containing a `file-structure` code block
+- Generates: Directories and placeholder files
+
+**kiro_archive(feature: string)**
+- Cleanup: Moves completed specs to `.kiro/archive/`
+- Use when feature is shipped and verified
 
 ### Task Management Tools
 

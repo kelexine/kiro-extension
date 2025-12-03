@@ -1,6 +1,6 @@
 {
   "name": "kiro",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Spec-driven development workflow - Requirements, Design, Tasks, Execute",
   "mcpServers": {
     "kiro": {

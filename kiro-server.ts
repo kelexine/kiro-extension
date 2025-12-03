@@ -396,6 +396,44 @@ async function kiroScaffold(feature: string): Promise<string> {
   return `Scaffolded ${created.length} items:\n${created.join("\n")}`;
 }
 
+async function kiroReview(feature: string): Promise<string> {
+  const tasksPath = getSpecPath(feature, "tasks.md");
+  
+  if (!fileExists(tasksPath)) {
+    throw new Error("Tasks phase not found. Cannot review a feature that hasn't been planned.");
+  }
+
+  const directive = readFile(path.join(COMMANDS_DIR, "review.md"));
+  const helpers = loadHelpers();
+  const requirements = readFile(getSpecPath(feature, "requirements.md"));
+  const design = readFile(getSpecPath(feature, "design.md"));
+  const tasks = readFile(tasksPath);
+
+  return `${directive}${helpers}\n\n**Feature**: ${feature}\n**Phase**: QA Review\n\n## Requirements\n${requirements}\n\n## Design\n${design}\n\n## Tasks Status\n${tasks}`;
+}
+
+async function kiroArchive(feature: string): Promise<string> {
+  const featureDir = path.join(SPECS_BASE, feature);
+  const archiveBase = ".kiro/archive";
+  const archiveDir = path.join(archiveBase, feature);
+
+  if (!fileExists(featureDir)) {
+    throw new Error(`Feature '${feature}' not found in active specs.`);
+  }
+
+  // Ensure archive base exists
+  fs.mkdirSync(archiveBase, { recursive: true });
+
+  if (fileExists(archiveDir)) {
+    throw new Error(`Feature '${feature}' is already archived.`);
+  }
+
+  // Move directory
+  fs.renameSync(featureDir, archiveDir);
+
+  return `Feature '${feature}' successfully archived to ${archiveDir}`;
+}
+
 async function getTask(feature: string, taskId: string): Promise<string> {
   const tasksPath = getSpecPath(feature, "tasks.md");
   
@@ -537,6 +575,28 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: "kiro_review",
+      description: "Perform QA review and gap analysis against requirements",
+      inputSchema: {
+        type: "object",
+        properties: {
+          feature: { type: "string", description: "Feature name" },
+        },
+        required: ["feature"],
+      },
+    },
+    {
+      name: "kiro_archive",
+      description: "Archive a completed feature to clean up the workspace",
+      inputSchema: {
+        type: "object",
+        properties: {
+          feature: { type: "string", description: "Feature name" },
+        },
+        required: ["feature"],
+      },
+    },
+    {
       name: "kiro_vibe",
       description: "Quick development mode (isolated, never combine with workflow tools)",
       inputSchema: {
@@ -599,6 +659,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return { content: [{ type: "text", text: await kiroStatus() }] };
       case "kiro_scaffold":
         return { content: [{ type: "text", text: await kiroScaffold(args.feature as string) }] };
+      case "kiro_review":
+        return { content: [{ type: "text", text: await kiroReview(args.feature as string) }] };
+      case "kiro_archive":
+        return { content: [{ type: "text", text: await kiroArchive(args.feature as string) }] };
       case "kiro_vibe":
         return { content: [{ type: "text", text: await kiroVibe() }] };
       case "get_task":

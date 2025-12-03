@@ -71,6 +71,7 @@ kiro-extension/
 │       ├── design.md     # Design phase
 │       ├── task.md       # Task generation
 │       ├── execute.md    # Task execution
+│       ├── review.md     # QA Review
 │       └── vibe.md       # Quick dev mode
 ├── skills/
 │   └── kiro-skill/
@@ -120,6 +121,31 @@ Use kiro_execute tool with feature "user-authentication" and task_id "1"
 
 Auto-marks task as in-progress, provides full context
 
+### 5. Review & Archive
+
+**Check Status Dashboard:**
+```
+Use kiro_status tool
+```
+
+**Scaffold Project:**
+```
+Use kiro_scaffold tool with feature "user-authentication"
+```
+(Requires design.md with `file-structure` block)
+
+**QA Review:**
+```
+Use kiro_review tool with feature "user-authentication"
+```
+(Performs gap analysis between requirements and implementation)
+
+**Archive Feature:**
+```
+Use kiro_archive tool with feature "user-authentication"
+```
+(Moves completed feature to archive)
+
 ### Task Management
 
 **Check task status:**
@@ -150,6 +176,10 @@ Use kiro_vibe tool
 | `kiro_design` | Design document | requirements.md exists |
 | `kiro_task` | Task list generation | design.md exists |
 | `kiro_execute` | Task execution | tasks.md exists |
+| `kiro_status` | Feature dashboard | None |
+| `kiro_scaffold` | Auto-generate files | design.md with structure |
+| `kiro_review` | QA Gap Analysis | tasks.md exists |
+| `kiro_archive` | Archive feature | Feature exists |
 | `kiro_vibe` | Quick dev mode | None (isolated) |
 | `get_task` | Task status check | tasks.md exists |
 | `set_task` | Update task status | Validates sequence |
