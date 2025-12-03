@@ -8,5 +8,5 @@
       "args": ["${extensionPath}${/}dist${/}kiro-server.js"]
     }
   },
-  "contextFileName": "GEMINI.md"
+  "contextFileName": "CONTEXT.md"
 }

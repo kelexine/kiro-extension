@@ -80,7 +80,7 @@ kiro-extension/
 ├── dist/
 │   └── kiro-mcp-server.js  # Built MCP server
 ├── gemini-extension.json
-├── GEMINI.md
+├── CONTEXT.md
 ├── kiro-mcp-server.ts
 ├── package.json
 └── tsconfig.json
