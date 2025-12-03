@@ -1,6 +1,6 @@
 {
   "name": "kiro-extension",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Kiro MCP Server - Spec-driven development workflow for Gemini CLI",
   "author": "@kelexine (https://github.com/kelexine)",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "kiro-extension": "./dist/kiro-server.js"
   },
   "scripts": {
-    "build": "esbuild kiro-server.ts --bundle --platform=node --format=esm --outfile=dist/kiro-server.js --banner:js=\"#!/usr/bin/env node\"",
+    "build": "esbuild kiro-server.ts --bundle --platform=node --format=esm --outfile=dist/kiro-server.js && chmod +x dist/kiro-server.js",
     "watch": "tsc --watch",
     "prepare": "npm run build"
   },

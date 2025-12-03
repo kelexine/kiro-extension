@@ -1,7 +1,8 @@
+#!/usr/bin/env node
 /**
  * Kiro MCP Server - Spec-driven development workflow for Gemini CLI
  * Author: @kelexine (https://github.com/kelexine)
- * Version: 0.1.12
+ * Version: 0.1.13
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
