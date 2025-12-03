@@ -3,11 +3,15 @@ node_modules/
 package-lock.json
 
 # Build output
-dist/
+# dist/
 *.js
 *.js.map
 *.d.ts
 *.d.ts.map
+
+# Explicitly allow dist
+!dist/
+!dist/**
 
 # Keep source
 !kiro-mcp-server.ts
