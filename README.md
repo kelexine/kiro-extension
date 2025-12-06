@@ -1,8 +1,12 @@
-# Kiro - Gemini CLI Extension
+# Kiro - Gemini CLI Extension (Qwen CLI Compatible)
 
 **Author:** [@kelexine](https://github.com/kelexine)
 
-Spec-driven development workflow for Gemini CLI. Converts Claude Code Skills into MCP tools with state machine enforcement.
+Spec-driven development workflow for Gemini CLI. An MCP server with state machine enforcement.
+
+## Thanks
+
+Inspired by AWS Kiro Agentic IDE
 
 ## Overview
 
